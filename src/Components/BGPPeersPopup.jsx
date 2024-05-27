@@ -1,0 +1,255 @@
+import React, { useState } from "react";
+import { IoIosClose } from "react-icons/io";
+import { GoPlus } from "react-icons/go";
+
+
+const ToggleSwitch = ({ isChecked, onChange }) => {
+  return (
+    <label className="inline-flex items-center cursor-pointer">
+      <input
+        type="checkbox"
+        checked={isChecked}
+        onChange={onChange}
+        className="sr-only peer"
+      />
+      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer dark:bg-[#F2F4F7] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+    </label>
+  );
+};
+
+const BGPPeersPopup = ({ onClose }) => {
+  const BGPTable = [
+    {
+      Status: "Active",
+      Name: "SCBGP",
+      local_asn: "65001",
+      local_address: "185.44.119.182",
+      remote_asn: "207811",
+      remote_address: "89.221.39.11",
+      multihop: "Active",
+    },
+  ];
+  const [isCheckedASN, setIsCheckedASN] = useState(false);
+  const [isCheckedGeneralBan2, setIsCheckedGeneralBan2] = useState(false);
+  const [isCheckedRemoteHost, setIsCheckedRemoteHost] = useState(false);
+
+  const handleToggleASN = () => setIsCheckedASN(!isCheckedASN);
+  const handleToggleGeneralBan2 = () =>
+    setIsCheckedGeneralBan2(!isCheckedGeneralBan2);
+  const handleToggleRemoteHost = () =>
+    setIsCheckedRemoteHost(!isCheckedRemoteHost);
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white w-[80%] h-[90%] p-5 rounded shadow-lg overflow-y-scroll">
+        <div className="flex justify-between items-center border-b pb-2">
+          <h2 className="text-xl font-bold">BGP Peers </h2>
+          <button onClick={onClose} className="text-[24px]">
+            <IoIosClose />
+          </button>
+        </div>
+        <h2 className="text-[18px] font-bold mt-3">General Settings:</h2>
+
+        <div className="flex justify-between items-center mt-4">
+          <span className="text-[18px]">Scrubbing Mode</span>
+          <span className="text-[18px] text-[#F56B3F]">Disabled </span>
+        </div>
+        <div className="grid grid-cols-2 mt-3 items-center">
+          <div className="flex gap-2 items-center">
+            <span className="text-[18px]">Enable General BGP Support</span>
+            <p className="text-[18px] text-[#F56B3F]">(set main gobgp)</p>
+          </div>
+          <div className="flex items-center justify-end">
+            <ToggleSwitch isChecked={isCheckedASN} onChange={handleToggleASN} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 mt-3 items-center">
+          <div className="flex gap-2 col-span-2 items-center">
+            <span className="text-[18px]">
+              Enable announces attacked host IPv4
+            </span>
+            <p className="text-[18px] text-[#F56B3F]">
+              (set main gobgp_announce_host)
+            </p>
+          </div>
+          <div className="flex items-center justify-end">
+            <ToggleSwitch
+              isChecked={isCheckedGeneralBan2}
+              onChange={handleToggleGeneralBan2}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 border-b pb-5 mt-3 items-center">
+          <div className="flex gap-2 col-span-2 items-center">
+            <span className="text-[18px]">
+              Enable announces attacked host IPv6
+            </span>
+            <p className="text-[18px] text-[#F56B3F]">
+              (set main gobgp_announce_host_ipv6)
+            </p>
+          </div>
+          <div className="flex items-center justify-end">
+            <ToggleSwitch
+              isChecked={isCheckedRemoteHost}
+              onChange={handleToggleRemoteHost}
+            />
+          </div>
+        </div>
+        <h2 className="text-[18px] font-bold mt-3 pt-3">
+          Blackhole Community IPv4:
+        </h2>
+        <div className="grid grid-cols-1 gap-x-32  items-start">
+          <div className="flex flex-col mt-4">
+            <div className="relative flex flex-col w-full">
+              <label htmlFor="">
+                Blackhole Community Host IPv4 used in your network (set main
+                gobgp_community_host){" "}
+              </label>
+              <input
+                type="text"
+                className="border border-gray-300 rounded p-2 pr-12 focus:outline-none focus:ring-2"
+                defaultValue="65535:666"
+              />
+              <button className="absolute right-2 top-[68%] transform -translate-y-1/2 bg-[#F56B3F] rounded text-white p-1">
+                <GoPlus />
+              </button>
+            </div>
+            <span className="mt-1 text-[14px] text-[#F80202]">
+              Please use only 16 bit ASN numbers (65535) for communities her
+            </span>
+          </div>
+        </div>
+        <h2 className="text-[18px] font-bold mt-3 pt-3">
+          Blackhole Community IPv6:
+        </h2>
+        <div className="grid grid-cols-1 gap-x-32  items-start">
+          <div className="flex flex-col mt-4">
+            <div className="relative flex flex-col w-full">
+              <label htmlFor="" className="text[#667085]">
+                Blackhole Community Host IPv6 (set main
+                gobgp_community_host_ipv6)
+              </label>
+              <input
+                type="text"
+                className="border border-gray-300 rounded p-2 pr-12 focus:outline-none focus:ring-2"
+                defaultValue="65535:666"
+              />
+              <button className="absolute right-2 top-[68%] transform -translate-y-1/2 bg-[#F56B3F] rounded text-white p-1">
+                <GoPlus />
+              </button>
+            </div>
+          </div>
+        </div>
+        <h2 className="text-[18px] font-bold mt-3 pt-3">BGP Peers:</h2>
+        <div className="grid grid-cols-1 gap-x-32  items-start">
+          <div className="flex flex-col mt-4">
+            <div className="relative flex flex-col w-full">
+              <input
+                type="text"
+                className="border border-gray-300 rounded p-2 pr-12 focus:outline-none focus:ring-2"
+                defaultValue="Add new BGP Peer"
+              />
+              <button className="absolute right-2 top-[52%] transform -translate-y-1/2 bg-[#F56B3F] rounded text-white p-1">
+                <GoPlus />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-b py-5">
+          <table className="w-full border-t border-b  table-auto mt-5">
+            <thead>
+              <tr className="bg-[#F9F9FC]">
+                <th className="text-[14px] py-4 px-2 text-start">Status</th>
+                <th className="text-[14px] py-4 px-2 text-start">Name</th>
+                <th className="text-[14px] py-4 px-2 text-start">local_asn</th>
+                <th className="text-[14px] py-4 px-2 text-start">
+                  local_address
+                </th>
+                <th className="text-[14px] py-4 px-2 text-start">remote_asn</th>
+                <th className="text-[14px] py-4 px-2 text-start">
+                  remote_address
+                </th>
+                <th className="text-[14px] py-4 px-2 text-start">multihop</th>
+                <th className="text-[14px] py-4 px-2 text-start">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {BGPTable.map((BGP, index) => (
+                <tr key={index}>
+                  <td
+                    className={
+                      BGP.Status == "Active"
+                        ? "text-[#0D894F] text-[14px] border py-4 px-2 text-start"
+                        : "text-[#FF3333] text-[14px] border py-4 px-2 text-start"
+                    }
+                  >
+                    {BGP.Status}
+                  </td>
+                  <td className="text-[14px] py-4 px-2 border  text-start">
+                    {BGP.Name}
+                  </td>
+                  <td className="text-[14px] py-4 px-2 border  text-start">
+                    {BGP.local_asn}
+                  </td>
+                  <td className="text-[14px] py-4 px-2 border  text-start">
+                    {BGP.local_address}
+                  </td>
+                  <td className="text-[14px] py-4 px-2 border  text-start">
+                    {BGP.remote_asn}
+                  </td>
+                  <td className="text-[14px] py-4 px-2 border  text-start">
+                    {BGP.remote_address}
+                  </td>
+                  <td
+                    className={
+                      BGP.multihop === "Active"
+                        ? "text-[#0D894F] text-[14px]  border py-4 px-2 text-start"
+                        : "text-[#FF3333] text-[14px]  border py-4 px-2 text-start"
+                    }
+                  >
+                    {BGP.multihop}
+                  </td>
+                  <td className="flex gap-4 items-center border  py-4 px-2 text-start">
+                    <button className="text-[#016FE3] bg-[#E6F1FC] px-4 py-2">
+                      Edit
+                    </button>
+                    <button className="text-[#FF3333] bg-[#FFEBEB] px-4 py-2">
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <h2 className="text-[18px] font-bold py-5">BGP Peers Neighbor: </h2>
+        <div className="grid grid-cols-2">
+          <div className="grid grid-cols-5">
+            <div className="flex flex-col py-5 col-span-3">
+              <span className="text-[18px]">
+                <b>Peer As Up/Down State </b>
+              </span>
+              <p>89.221.39.11 207811 33d 17:21:14 Establ </p>
+            </div>
+            <div className="flex border-r p-5 border-l flex-col">
+              <span className="text-[18px]">
+                <b>Received </b>
+              </span>
+              <p>50</p>
+            </div>
+            <div className="flex flex-col p-5">
+              <span className="text-[18px]">
+                <b>Accepted</b>
+              </span>
+              <p>50</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BGPPeersPopup;
