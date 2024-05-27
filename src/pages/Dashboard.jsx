@@ -24,7 +24,7 @@ const Dashboard = () => {
               <FaPlus />General
             </button>
             <button className="bg-[#F56B3F] text-[#fff] flex items-center py-1 rounded px-2 gap-1">
-              <FaPlus />Details
+              <FaPlus />Details hello
             </button>
           </div>
         </div>
